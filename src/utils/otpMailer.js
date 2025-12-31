@@ -1,10 +1,11 @@
 import nodemailer from 'nodemailer';
-import { ownerEmailId, ownerEmailPasscode, ownerName } from '../config/serverConfig';
+import { ownerEmailId, ownerEmailPasscode, ownerName } from '../config/serverConfig.js';
 
 // code copied from "https://nodemailer.com/" and modified accordingly
 
 async function otpMailer(emailId, otp){
-    const transporter = nodemailer.createTransport({ 
+    const transporter =await nodemailer.createTransport({ 
+        service: 'gmail',
         host: "smtp.ethereal.email",
         port: 587,
         secure: false, // Use true for port 465, false for port 587
@@ -15,7 +16,7 @@ async function otpMailer(emailId, otp){
     });
 
     // Send an email using async/await
-    (async () => {
+    return (async () => {
         const info = await transporter.sendMail({
             from: `"${ownerName}" <${ownerEmailId}>`,
             to: emailId,
@@ -24,8 +25,9 @@ async function otpMailer(emailId, otp){
         });
 
         console.log("Message sent:", info.messageId);
+        return info;
     })();
-    return info;
+    
 }
 
 export default otpMailer;

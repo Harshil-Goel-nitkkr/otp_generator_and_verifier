@@ -1,11 +1,13 @@
 import express from 'express';
-import {port} from './config/serverConfig';
-import authRouter from './routes/authRoutes';
+import {port} from './config/serverConfig.js';
+import authRouter from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
+import connectDb from './config/dbConfig.js';
 
 const app = express();
 
-app.listen(port,()=>{
+app.listen(port,async ()=>{
+    await connectDb();
     console.log("Running on port " + port);
 });
 app.use(express.json());

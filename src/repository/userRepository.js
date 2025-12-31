@@ -1,4 +1,4 @@
-import userModel from "../schema/userSchema"
+import userModel from "../schema/userSchema.js"
 
 async function fetchUser(email){
     try{
@@ -11,8 +11,9 @@ async function fetchUser(email){
 }
 
 async function updateOtp(email,otp,expiryTime){
+    console.log(email);
     try{
-        const user = await userModel.findOneAndUpdate({email},{otp:otp, otpExpiry: expiryTime});
+        const user = await userModel.findOneAndUpdate({email:email},{otp:otp, otpExpiry: expiryTime});
         return user;
     }
     catch(error){

@@ -1,4 +1,4 @@
-import { generateOTP, regenerateOTP, verifyEnteredOTP } from "../service/authService";
+import { generateOTP, regenerateOTP, verifyEnteredOTP } from "../service/authService.js";
 
 async function sendOTP(req,res){
     try{

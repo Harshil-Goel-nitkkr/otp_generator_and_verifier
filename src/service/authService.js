@@ -1,10 +1,11 @@
-import { fetchUser, updateOtp } from "../repository/userRepository";
-import otpMailer from "../utils/otpMailer";
+import { fetchUser, updateOtp } from "../repository/userRepository.js";
+import otpMailer from "../utils/otpMailer.js";
 import jwt from 'jsonwebtoken';
-import {tokenSecretKey, tokenExpiryTime} from '../config/serverConfig';
+import {tokenSecretKey, tokenExpiryTime} from '../config/serverConfig.js';
 
 async function generateOTP(email){
     const otp = (Math.floor(Math.random()*10000)).toString();
+    while(otp.length < 4) otp = "0" + otp;
     const expiryTime = Date.now() + 10*60*1000; // 10 minutes
     const user = await updateOtp(email,otp,expiryTime);
 
@@ -49,6 +50,7 @@ async function verifyEnteredOTP(email, givenOtp){
 
     user.otp = undefined;
     user.otpexpiry = undefined;
+    user.save();
 
     // now generate a toke (JWT) and return that token
     const token = jwt.sign({email: email},tokenSecretKey,{algorithm: 'RS256'}, {expiresIn:tokenExpiryTime});
