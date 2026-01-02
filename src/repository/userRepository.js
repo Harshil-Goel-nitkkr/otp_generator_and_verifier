@@ -2,7 +2,7 @@ import userModel from "../schema/userSchema.js"
 
 async function fetchUser(email){
     try{
-        const user = await userModel.find({email:email});
+        const user = await userModel.findOne({email:email});
         return user;
     }
     catch(error){

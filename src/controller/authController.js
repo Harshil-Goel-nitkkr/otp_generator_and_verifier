@@ -57,6 +57,7 @@ async function resendOTP(req,res){
 }
 
 async function verifyOTP(req,res){
+    console.log(req.body.email);
     try{
         const response = await verifyEnteredOTP(req.body.email, req.body.otp);
         res.cookie('Token', response.token, {

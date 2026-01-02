@@ -8,7 +8,7 @@ async function generateOTP(email){
     while(otp.length < 4) otp = "0" + otp;
     const expiryTime = Date.now() + 10*60*1000; // 10 minutes
     const user = await updateOtp(email,otp,expiryTime);
-
+    
     if(!user){
         throw {message: "User not found", statusCode: 404};
     }
@@ -35,8 +35,12 @@ async function regenerateOTP(email){
 }
 
 async function verifyEnteredOTP(email, givenOtp){
+    console.log(email);
     const user = await fetchUser(email);
-    if(!user.otp || !user.otpExpiry){
+    console.log(user);
+    console.log(user.otp);
+    console.log(user.otpExpiry);
+    if(!user.otp || user.otp === "" || !user.otpExpiry){
         throw {message: "Otp not generated, Please generate otp first", statusCode: 400};
     }
 
@@ -48,13 +52,15 @@ async function verifyEnteredOTP(email, givenOtp){
         throw {message: "Invalid Otp", statusCode: 401};
     }
 
-    user.otp = undefined;
-    user.otpexpiry = undefined;
+    user.otp = "";
     user.save();
 
+    console.log("hello");
     // now generate a toke (JWT) and return that token
-    const token = jwt.sign({email: email},tokenSecretKey,{algorithm: 'RS256'}, {expiresIn:tokenExpiryTime});
-
+    console.log(tokenSecretKey);
+    console.log(tokenExpiryTime);
+    const token = jwt.sign({email: email},tokenSecretKey, {expiresIn:tokenExpiryTime});
+    console.log(token);
     return {
         token: token,
     }
